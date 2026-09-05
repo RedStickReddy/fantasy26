@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sortable 2026 NFL fantasy draft projections">
+  <title>Suli Squad Selector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="page-shell">
+    <header class="hero">
+      <div class="eyebrow"><span></span> 2026 Draft Intelligence</div>
+      <div class="hero-copy">
+        <div>
+          <h1>Suli Squad <em>Selector</em></h1>
+          <p>May the odds be ever in your favor.</p>
+        </div>
+        <div class="season-mark" aria-label="2026 season">
+          <span>SEASON</span>
+          <strong>26</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="stats" aria-label="Projection summary">
+      <article><span>Player pool</span><strong id="playerCount">—</strong><small>total projections</small></article>
+      <article><span>Teams</span><strong id="teamCount">—</strong><small>franchises covered</small></article>
+      <article><span>Top projection</span><strong id="topPoints">—</strong><small id="topPlayer">fantasy points</small></article>
+    </section>
+
+    <section class="draftboard">
+      <div class="board-header">
+        <div>
+          <div class="section-kicker">The big board</div>
+          <h2>Player projections</h2>
+        </div>
+        <div class="result-count" id="resultCount" aria-live="polite">Loading projections…</div>
+      </div>
+
+      <div class="toolbar">
+        <label class="search-field">
+          <span class="sr-only">Search players or teams</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/></svg>
+          <input id="searchInput" type="search" placeholder="Search player or team…" autocomplete="off">
+          <kbd>⌘ K</kbd>
+        </label>
+        <label class="select-wrap">
+          <span class="sr-only">Filter by team</span>
+          <select id="teamFilter"><option value="">All teams</option></select>
+        </label>
+        <div class="position-filters" id="positionFilters" aria-label="Filter by position">
+          <button type="button" class="active" data-position="">All</button>
+          <button type="button" data-position="QB">QB</button>
+          <button type="button" data-position="RB">RB</button>
+          <button type="button" data-position="WR">WR</button>
+          <button type="button" data-position="TE">TE</button>
+          <button type="button" data-position="K">K</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr class="heading-row">
+              <th class="rank-column" scope="col"><button class="sort-button" data-key="projectionRank"># <span class="sort-icon"></span></button></th>
+              <th scope="col"><button class="sort-button" data-key="playerName">Player <span class="sort-icon"></span></button></th>
+              <th scope="col"><button class="sort-button" data-key="teamName">Team <span class="sort-icon"></span></button></th>
+              <th scope="col"><button class="sort-button" data-key="position">Pos <span class="sort-icon"></span></button></th>
+              <th scope="col"><button class="sort-button" data-key="playerRole">Role <span class="sort-icon"></span></button></th>
+              <th class="number-column" scope="col"><button class="sort-button active descending" data-key="projectedFantasyPoints">Proj. pts <span class="sort-icon"></span></button></th>
+              <th class="number-column" scope="col"><button class="sort-button" data-key="projectedTotalTds">TDs <span class="sort-icon"></span></button></th>
+              <th class="number-column" scope="col"><button class="sort-button" data-key="projectedAllPurposeYards">Yards <span class="sort-icon"></span></button></th>
+              <th class="number-column" scope="col"><button class="sort-button" data-key="depthRank">Depth <span class="sort-icon"></span></button></th>
+            </tr>
+            <tr class="filter-row">
+              <th class="rank-column"><label><span class="sr-only">Maximum projection rank</span><input data-filter-key="projectionRank" data-filter-mode="max" type="number" min="1" placeholder="Max"></label></th>
+              <th><label><span class="sr-only">Filter player</span><input data-filter-key="playerName" data-filter-mode="contains" type="search" placeholder="Filter player"></label></th>
+              <th><label><span class="sr-only">Filter team</span><select id="tableTeamFilter" data-filter-key="teamName"><option value="">All teams</option></select></label></th>
+              <th><label><span class="sr-only">Filter position</span><select data-filter-key="position"><option value="">All</option><option>QB</option><option>RB</option><option>WR</option><option>TE</option><option>K</option></select></label></th>
+              <th><label><span class="sr-only">Filter role</span><select data-filter-key="playerRole"><option value="">All roles</option><option>Starter</option><option>Backup</option><option>Depth</option></select></label></th>
+              <th><label><span class="sr-only">Minimum projected points</span><input data-filter-key="projectedFantasyPoints" data-filter-mode="min" type="number" min="0" step="0.1" placeholder="Min pts"></label></th>
+              <th><label><span class="sr-only">Minimum touchdowns</span><input data-filter-key="projectedTotalTds" data-filter-mode="min" type="number" min="0" placeholder="Min TDs"></label></th>
+              <th><label><span class="sr-only">Minimum yards</span><input data-filter-key="projectedAllPurposeYards" data-filter-mode="min" type="number" min="0" placeholder="Min yards"></label></th>
+              <th><label><span class="sr-only">Filter depth rank</span><input data-filter-key="depthRank" type="number" min="1" placeholder="Depth"></label></th>
+            </tr>
+          </thead>
+          <tbody id="playerRows"></tbody>
+        </table>
+        <div class="empty-state" id="emptyState" hidden>
+          <div>Ø</div>
+          <h3>No players found</h3>
+          <p>Try widening your search or changing a filter.</p>
+          <button id="clearFilters" type="button">Clear filters</button>
+        </div>
+      </div>
+
+      <div class="board-footer">
+        <span>Click any column heading to sort</span>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </section>
+  </main>
+
+  <template id="errorTemplate">
+    <div class="load-error">
+      <strong>Couldn’t load the projections.</strong>
+      <span>ESPN’s live projection feed is currently unavailable. Try refreshing shortly.</span>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
